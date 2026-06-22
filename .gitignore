@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+.env
+models/
+deepfake.jpg
+reports/*
+uploads/*
+*.pdf
+*.png
+*.jpg
+*.jpeg
+xai_fake_detector/
+test_image.py

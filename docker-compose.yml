@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/app/uploads
+      - reports_data:/app/reports
+
+volumes:
+  uploads_data:
+  reports_data:
