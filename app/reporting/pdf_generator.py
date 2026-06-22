@@ -250,8 +250,10 @@ def generate_pdf(report: EvidenceReport) -> str:
             pdf.cell(20, 5, _s(f"  {sev.upper()}"), fill=True)
             pdf.set_text_color(*C_DARK)
             pdf.set_font("Helvetica", "", 8.5)
-            pdf.set_x(pdf.get_x() + 3)
-            pdf.multi_cell(155, 5, _s(finding["detail"]))
+            pdf.ln(5)
+            pdf.set_x(20)
+            pdf.multi_cell(175, 5, _s(finding["detail"]))
+            pdf.ln(1)
         pdf.ln(2)
 
     # ── Section 6: Evidence Summary ───────────────────────────────────────────
@@ -267,10 +269,10 @@ def generate_pdf(report: EvidenceReport) -> str:
         pdf.set_fill_color(*s_color)
         pdf.cell(30, 5, _s(f"  {strength}"), fill=True)
         pdf.set_text_color(*C_DARK)
-        pdf.ln(1)
+        pdf.ln(5)
         pdf.set_x(20)
         pdf.set_font("Helvetica", "", 8.5)
-        pdf.multi_cell(175, 5, _s(item["detail"]))
+        pdf.multi_cell(170, 5, _s(item["detail"]))
         pdf.ln(1)
 
     out_path = REPORT_DIR / f"report_{report.analysis_id}.pdf"

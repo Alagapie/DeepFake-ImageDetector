@@ -1,0 +1,28 @@
+apiVersion: 2021-10-01
+location: germanywestcentral
+name: xai-detector-aci
+properties:
+  containers:
+  - name: xai-detector-aci
+    properties:
+      image: deepfakeprojectacr2026.azurecr.io/deepfake-image-detector:latest
+      resources:
+        requests:
+          cpu: 2.0
+          memoryInGb: 4.0
+      ports:
+      - port: 8000
+      environmentVariables:
+      - name: AZURE_STORAGE_SAS_TOKEN
+        value: "se=2027-06-22&sp=rl&sv=2026-02-06&sr=c&sig=c543ZE8EdMv/gKRPthOHmH3/evZFi9dMGWt82cq/Pok%3D"
+  imageRegistryCredentials:
+  - server: deepfakeprojectacr2026.azurecr.io
+    username: deepfakeprojectacr2026
+    password: 1ZfpaOoFphhedqTmFteew9bxog1hBdXcn9VrcYvFFVCWyGFfTCdXJQQJ99CFAC5T7U2Eqg7NAAACAZCRpCnO
+  ipAddress:
+    type: Public
+    dnsNameLabel: xai-detector
+    ports:
+    - port: 8000
+  osType: Linux
+type: Microsoft.ContainerInstance/containerGroups
