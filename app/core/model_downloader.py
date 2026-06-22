@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 MODEL_FILES = ["config.json", "model.safetensors", "preprocessor_config.json"]
@@ -10,7 +11,7 @@ BLOB_ENDPOINT = f"https://{BLOB_ACCOUNT}.blob.core.windows.net"
 
 def ensure_model(model_dir: Path) -> None:
     if all((model_dir / f).exists() for f in MODEL_FILES):
-        print(f"[ModelDownloader] All model files present in {model_dir}")
+        print(f"[ModelDownloader] All model files present in {model_dir}", flush=True)
         return
 
     sas_token = os.environ.get("AZURE_STORAGE_SAS_TOKEN")
@@ -25,13 +26,18 @@ def ensure_model(model_dir: Path) -> None:
     for filename in MODEL_FILES:
         dest = model_dir / filename
         if dest.exists():
-            print(f"[ModelDownloader] {filename} already exists, skipping")
+            print(f"[ModelDownloader] {filename} already exists, skipping", flush=True)
             continue
 
         url = f"{BLOB_ENDPOINT}/{BLOB_CONTAINER}/{filename}?{sas_token}"
-        print(f"[ModelDownloader] Downloading {filename}...")
-        _download(url, dest)
-        print(f"[ModelDownloader] {filename} saved ({dest.stat().st_size / 1024 / 1024:.1f} MB)")
+        print(f"[ModelDownloader] Downloading {filename}...", flush=True)
+        try:
+            _download(url, dest)
+            size_mb = dest.stat().st_size / 1024 / 1024
+            print(f"[ModelDownloader] {filename} saved ({size_mb:.1f} MB)", flush=True)
+        except Exception as e:
+            print(f"[ModelDownloader] FAILED to download {filename}: {e}", flush=True)
+            raise
 
 
 def _download(url: str, dest: Path) -> None:
