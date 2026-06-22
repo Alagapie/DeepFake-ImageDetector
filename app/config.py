@@ -13,6 +13,9 @@ IMAGE_SIZE   = 224                          # ViT expects 224×224
 LABEL_FAKE   = "FAKE"
 LABEL_REAL   = "REAL"
 
+# ── Blob storage ────────────────────────────────────────────────────────────
+AZURE_STORAGE_SAS_TOKEN = os.environ.get("AZURE_STORAGE_SAS_TOKEN", "")
+
 # ── Explainability ────────────────────────────────────────────────────────────
 ATTENTION_ALPHA   = 0.5                     # heatmap overlay opacity
 GRADCAM_ALPHA     = 0.5

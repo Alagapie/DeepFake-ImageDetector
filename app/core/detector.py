@@ -9,12 +9,14 @@ from PIL import Image
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 from app.config import DEVICE, IMAGE_SIZE, LABEL_FAKE, LABEL_REAL, MODEL_PATH
+from app.core.model_downloader import ensure_model
 
 
 class FakeImageDetector:
     _instance: "FakeImageDetector | None" = None
 
     def __init__(self) -> None:
+        ensure_model(MODEL_PATH)
         print(f"[Detector] Loading model from {MODEL_PATH} on {DEVICE}…")
         self.processor = AutoImageProcessor.from_pretrained(str(MODEL_PATH))
         self.model = AutoModelForImageClassification.from_pretrained(

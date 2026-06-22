@@ -8,8 +8,6 @@ RUN pip install --no-cache-dir --default-timeout=300 \
     --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir --default-timeout=300 -r requirements.txt
 
-COPY models/ ./models/
-
 COPY app/ ./app/
 
 RUN mkdir -p uploads reports
