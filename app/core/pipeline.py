@@ -52,12 +52,19 @@ def run_analysis(image_path: str | Path) -> EvidenceReport:
 
     # ── Phase 2: Attention Maps ───────────────────────────────────────────────
     print(f"[Pipeline:{analysis_id}] Extracting attention maps…")
-    attention_overlay, _, attention_regions = extract_attention_rollout(
+    attention_overlay, raw_mask, attention_regions = extract_attention_rollout(
         detector.vit_model, detector.vit_processor, image
     )
     attention_path = _save_heatmap(
         attention_overlay, f"attention_{analysis_id}.png"
     )
+    h = raw_mask.shape[0]
+    zones = [(0, h // 3), (h // 3, 2 * h // 3), (2 * h // 3, h)]
+    zone_names = ["upper region", "central region", "lower region"]
+    attention_scores = {
+        zone_names[i]: float(raw_mask[s:e].mean())
+        for i, (s, e) in enumerate(zones)
+    }
 
     # ── Phase 3: Grad-CAM ─────────────────────────────────────────────────────
     print(f"[Pipeline:{analysis_id}] Generating Grad-CAM…")
@@ -79,6 +86,7 @@ def run_analysis(image_path: str | Path) -> EvidenceReport:
         filename=image_path.name,
         prediction=prediction,
         attention_regions=attention_regions,
+        attention_scores=attention_scores,
         gradcam_regions=gradcam_regions,
         metadata=metadata,
     )
