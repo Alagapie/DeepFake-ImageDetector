@@ -33,10 +33,11 @@ def _vit_reshape_transform(tensor, height=None, width=None):
 
 def _get_target_layer(model):
     """
-    Return the last transformer encoder block's layernorm_after.
-    This model uses vit.layers instead of vit.encoder.layer.
+    Return the last transformer encoder block's layernorm_before.
+    Pre-attention activations retain spatial variation; post-attention
+    (layernorm_after) produces near-uniform values across patches.
     """
-    return [model.vit.layers[-1].layernorm_after]
+    return [model.vit.layers[-1].layernorm_before]
 class _ViTWrapper(torch.nn.Module):
     """
     Wraps the HF ViT model so it returns raw logits as a tensor.
